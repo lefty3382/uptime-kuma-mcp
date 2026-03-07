@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "uptime-kuma-mcp"
+version = "1.0.0"
+description = "MCP server for complete Uptime Kuma management"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=3.1.0",
+    "uptime-kuma-api-v2>=1.0.1",
+]
+
+[project.scripts]
+uptime-kuma-mcp = "uptime_kuma_mcp.__main__:main"
