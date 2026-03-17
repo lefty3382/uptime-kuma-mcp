@@ -72,6 +72,8 @@ def register_monitor_tools(mcp: FastMCP, client: KumaClient) -> None:
         description: str | None = None,
         accepted_statuscodes: list[str] | None = None,
         ignoreTls: bool = False,
+        expiryNotification: bool = False,
+        expiryNotificationDays: int | None = None,
         keyword: str | None = None,
         docker_container: str | None = None,
         docker_host: int | None = None,
@@ -91,6 +93,8 @@ def register_monitor_tools(mcp: FastMCP, client: KumaClient) -> None:
             description: Optional description.
             accepted_statuscodes: List of accepted HTTP status codes (default: ["200-299"]).
             ignoreTls: Ignore TLS certificate errors (default: False).
+            expiryNotification: Enable certificate expiry notification (default: False). HTTP/KEYWORD only.
+            expiryNotificationDays: Days before cert expiry to trigger notification (e.g., 21).
             keyword: Keyword to search for in response (KEYWORD type).
             docker_container: Container name (DOCKER type).
             docker_host: Docker host ID (DOCKER type).
@@ -111,6 +115,10 @@ def register_monitor_tools(mcp: FastMCP, client: KumaClient) -> None:
             kwargs["accepted_statuscodes"] = accepted_statuscodes
         if ignoreTls:
             kwargs["ignoreTls"] = True
+        if expiryNotification:
+            kwargs["expiryNotification"] = True
+        if expiryNotificationDays is not None:
+            kwargs["expiryNotificationDays"] = expiryNotificationDays
         if keyword is not None:
             kwargs["keyword"] = keyword
         if docker_container is not None:
@@ -133,6 +141,8 @@ def register_monitor_tools(mcp: FastMCP, client: KumaClient) -> None:
         parent: int | None = None,
         accepted_statuscodes: list[str] | None = None,
         ignoreTls: bool | None = None,
+        expiryNotification: bool | None = None,
+        expiryNotificationDays: int | None = None,
         notificationIDList: list[int] | None = None,
     ) -> dict:
         """Edit an existing monitor's configuration.
@@ -148,6 +158,8 @@ def register_monitor_tools(mcp: FastMCP, client: KumaClient) -> None:
             parent: New parent group ID.
             accepted_statuscodes: New accepted status codes.
             ignoreTls: New TLS ignore setting.
+            expiryNotification: Enable/disable certificate expiry notification.
+            expiryNotificationDays: Days before cert expiry to trigger notification.
             notificationIDList: New notification ID list.
         """
         kwargs = {}
@@ -169,6 +181,10 @@ def register_monitor_tools(mcp: FastMCP, client: KumaClient) -> None:
             kwargs["accepted_statuscodes"] = accepted_statuscodes
         if ignoreTls is not None:
             kwargs["ignoreTls"] = ignoreTls
+        if expiryNotification is not None:
+            kwargs["expiryNotification"] = expiryNotification
+        if expiryNotificationDays is not None:
+            kwargs["expiryNotificationDays"] = expiryNotificationDays
         if notificationIDList is not None:
             kwargs["notificationIDList"] = notificationIDList
         return await client.call("edit_monitor", monitor_id, **kwargs)
